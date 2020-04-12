@@ -25,9 +25,9 @@
                     android:layout_height="wrap_content"
                     android:text="STREET DANCERS"
                     android:textAllCaps="true"
-                    android:textSize="25sp"
+                    android:textSize="22sp"
                     android:textColor="@color/white"
-                    android:fontFamily="@font/aveny_t"/>
+                    android:fontFamily="@font/inriasans_bold"/>
         </androidx.appcompat.widget.Toolbar>
 
         <com.example.street_dancer_beta10.SharedComponents.RecyclerView.VideoPlayerRecyclerView

@@ -52,11 +52,7 @@ public class HomeFragment extends Fragment {
         getMedia();
         setAdapter();
 
-
-
     }
-
-
 
     private void getMedia() {
 
@@ -118,5 +114,12 @@ public class HomeFragment extends Fragment {
             recyclerView.releasePlayer();
         super.onDestroy();
     }
+    @Override
+    public void onPause() {
+        if (recyclerView != null)
+            recyclerView.releasePlayer();
+        super.onPause();
+    }
+
 
 }

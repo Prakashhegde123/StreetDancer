@@ -130,4 +130,18 @@ public class ProfileUserUploadFragment extends Fragment {
         return Glide.with(this)
                 .setDefaultRequestOptions(options);
     }
+
+    @Override
+    public void onDestroy() {
+        if (recyclerView != null)
+            recyclerView.releasePlayer();
+        super.onDestroy();
+    }
+    @Override
+    public void onPause() {
+        if (recyclerView != null)
+            recyclerView.releasePlayer();
+        super.onPause();
+    }
+
 }

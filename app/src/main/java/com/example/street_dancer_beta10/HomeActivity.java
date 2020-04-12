@@ -316,6 +316,12 @@ public class HomeActivity extends AppCompatActivity {
                 .commit();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+
 
 }
 

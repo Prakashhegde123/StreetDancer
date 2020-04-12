@@ -76,7 +76,7 @@
         android:layout_marginTop="24sp"
         android:textColor="@color/white"
         android:background="@drawable/custom_button2"
-
+        android:paddingEnd="15dp"
         android:text="Upload"/>
 
 </RelativeLayout>

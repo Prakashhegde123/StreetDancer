@@ -290,7 +290,7 @@ public class ProfileFragment extends Fragment {
     }
     private void loadProfileDefault() {
 
-        Glide.with(this).load(R.drawable.baseline_account_circle_black_48)
+        Glide.with(this).load(R.drawable.user)
                 .into(imageView);
         imageView.setColorFilter(ContextCompat.getColor(getContext(), R.color.profile_default_tint));
     }
@@ -396,6 +396,8 @@ public class ProfileFragment extends Fragment {
         intent.setData(uri);
         startActivityForResult(intent, 101);
     }
+
+
 
 
 
