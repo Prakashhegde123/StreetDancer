@@ -1,6 +1,6 @@
 package com.example.street_dancer_beta10.Segments.Profile.Model;
 
-public class ProfileFollowersFollowingsModel {
+public class    ProfileFollowersFollowingsModel {
 
     private String UserName;
     private String Name;

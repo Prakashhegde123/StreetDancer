@@ -3,18 +3,23 @@
 
     <item
         android:id="@+id/bottom_nav_home"
-        android:icon="@drawable/nav_home_button"/>
+        android:icon="@drawable/nav_home_button"
+        android:title="" />
     <item
         android:id="@+id/bottom_nav_search"
-        android:icon="@drawable/nav_search_button"/>
+        android:icon="@drawable/nav_search_button"
+        android:title="" />
     <item
         android:id="@+id/bottom_nav_upload"
-        android:icon="@drawable/nav_center_add_button"/>
+        android:icon="@drawable/nav_center_add_button"
+        android:title="" />
     <item
         android:id="@+id/bottom_nav_notification"
-        android:icon="@drawable/nav_favorite_button"/>
+        android:icon="@drawable/nav_favorite_button"
+        android:title="" />
     <item
         android:id="@+id/bottom_nav_profile"
-        android:icon="@drawable/nav_profile_button"/>
+        android:icon="@drawable/nav_profile_button"
+        android:title="" />
 
 </menu>

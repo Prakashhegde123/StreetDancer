@@ -1,13 +1,29 @@
 package com.example.street_dancer_beta10;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.Manifest;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
+
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.example.street_dancer_beta10.Segments.Home.HomeFragment;
 import com.example.street_dancer_beta10.Segments.Notification.NotificationFragment;
@@ -19,15 +35,26 @@ import com.luseen.spacenavigation.SpaceItem;
 import com.luseen.spacenavigation.SpaceNavigationView;
 import com.luseen.spacenavigation.SpaceOnClickListener;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class HomeActivity extends AppCompatActivity {
+
+
+
+
 
     public static FragmentManager fragmentManager;
 
     private BottomNavigationView bottomNavigationView;
-    private SpaceNavigationView spaceNavigationView;
     private Fragment fragment = null;
 
     // "stack" IS USED TO KEEP TRACK OF ALL THE FRAGMENTS THAT WERE VISITED BEFORE REACHING THE PRESENT FRAGMENT
@@ -127,6 +154,8 @@ public class HomeActivity extends AppCompatActivity {
 
                     case R.id.bottom_nav_upload :
                         fragment = new UploadFragment();
+
+
 
                         // ADD THE MENU-ITEM TO THE STACK, IF AND ONLY IF "onNavigationItemSelected"
                         // METHOD IS CALLED CLICKING ON THE NAVIGATION BAR
@@ -286,4 +315,7 @@ public class HomeActivity extends AppCompatActivity {
                 // COMMITTING THE CHANGES
                 .commit();
     }
+
+
 }
+

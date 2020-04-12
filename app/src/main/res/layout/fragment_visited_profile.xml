@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/fragment_container"
+    tools:context=".MainActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_visited_profile"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="?attr/homeAsUpIndicator"
+            android:background="@color/toolbar_background"
+            app:titleTextColor="#FFF"
+            style="@style/ToolbarTheme"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:title="Armaan Malik" />
+
+        <ImageView
+        android:id="@+id/img"
+            android:layout_below="@id/toolbar_visited_profile"
+        android:layout_width="match_parent"
+        android:layout_height="360dp"
+        android:background="@drawable/armaan"
+        android:src="@drawable/trending_gradient_shape"
+        android:scaleType="fitXY"/>
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Armaan malik"
+        android:fontFamily="@font/roboto_condensed_bold"
+        android:textAllCaps="true"
+        android:textColor="#fff"
+        android:textStyle="bold"
+        android:textSize="32dp"
+        android:layout_alignBottom="@+id/img"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="40dp"
+        />
+    <ImageButton
+        android:background="@android:color/transparent"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:id="@+id/icon"
+        android:layout_alignBottom="@+id/img"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="30dp"
+        android:layout_marginEnd="20dp"
+        android:src="@drawable/ic_person_add_black_24dp"
+        />
+    <TextView
+        android:id="@+id/followers_no"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="7.3M"
+        android:textColor="#A79F9F"
+        android:fontFamily="@font/roboto_condensed_bold"
+        android:textStyle="bold"
+        android:layout_alignBottom="@+id/img"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="10dp"
+        android:textSize="20sp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Followers"
+        android:layout_marginStart="75dp"
+        android:textColor="#A79F9F"
+        android:fontFamily="@font/roboto_condensed_bold"
+        android:layout_alignBottom="@+id/img"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="10dp"
+        android:textSize="20sp"/>
+    <LinearLayout
+        android:layout_below="@+id/img"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#000">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_profile_id"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="10dp">
+        </androidx.recyclerview.widget.RecyclerView>
+
+    </LinearLayout>
+    </RelativeLayout>
+</androidx.core.widget.NestedScrollView>

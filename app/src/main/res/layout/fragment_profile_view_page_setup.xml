@@ -14,10 +14,18 @@
         android:layout_height="?attr/actionBarSize"
         app:navigationIcon="?attr/homeAsUpIndicator"
         android:background="@color/toolbar_background"
-        app:title="pramod_0098"
         app:titleTextColor="@android:color/white"
         style="@style/ToolbarTheme"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Prakash Hegde208"
+            android:textAllCaps="true"
+            android:textSize="25sp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/roboto_condensed_bold"/>
+    </androidx.appcompat.widget.Toolbar>
 
     <com.google.android.material.tabs.TabLayout
         android:layout_below="@id/followers_following_toolbar_id"

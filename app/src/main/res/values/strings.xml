@@ -1,10 +1,69 @@
 <resources>
-    <string name="app_name">street-dancer-beta1.0</string>
+    <string name="app_name">STREET DANCERS</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="profile_fragment">Hello profile fragment</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    //splash
+    <string name="street_dancers1">street</string>
+    <string name="street_dancers2">dancers</string>
+    <string name="life_is_better">  Life is better when you dance ! </string>
+    <string name="with"> With</string>
+    <string name="Love"> Love </string>
+
+    //login
+    <string name="skip_btn"> Skip </string>
+    <string name="login_to_your_account"> Login To Your Account </string>
+    <string name="enter_email"> Enter email </string>
+    <string name="email_hint"> name@email.com</string>
+    <string name="enter_password"> Enter password </string>
+    <string name="password">  Password </string>
+    <string name="forgot_password">  Forgot password ? </string>
+    <string name="login"> Login</string>
+    <string name="need_account"> Need an account?</string>
+    <string name="create_account"> Create an account</string>
+
+    //register
+    <string name="Create_an_account"> Create an account </string>
+    <string name="Enter_details"> Enter Details </string>
+    <string name="Enter_name">Enter Name</string>
+    <string name="Enter_password">Enter Password</string>
+    <string name="Re_enter_password">Re-Enter Password</string>
+    <string name="Enter_phone_number">Enter Phone Number</string>
+    <string name="Enter_DOB">Enter DOB</string>
+    <string name="Gender">Gender</string>
+    <string name="Male">Male</string>
+    <string name="Female">Female</string>
+    <string name="Create_Account">Create Account</string>
+
+
+
+    //profile
+    <string name="gmail_profile">hegdeprakash</string>
+    <string name="action_settings">Settings</string>
+    <string name="profile_desc">Rowan Sebastian Atkinson CBE is an English actor,  comedian and screenwriter</string>
+    <string name="profile_title">Mr Bean</string>
+    <string name="posts">posts</string>
+    <string name="followers">followers</string>
+    <string name="following">following</string>
+    <string name="msg_error_unable_select_profile_pic">Unable to set profile image. Please try again!</string>
+    <string name="lbl_set_profile_photo">Set profile image</string>
+    <string name="lbl_take_camera_picture">Take a picture</string>
+    <string name="lbl_choose_from_gallery">Choose from gallery</string>
+    <string name="toast_image_intent_null">Image picker option is missing!</string>
+
+    <!-- font families -->
+    <string name="font_family_light">sans-serif-light</string>
+    <string name="font_family_medium">sans-serif-medium</string>
+    <string name="font_family_regular">sans-serif</string>
+    <string name="font_family_condensed">sans-serif-condensed</string>
+    <string name="font_family_black">sans-serif-black</string>
+    <string name="font_family_thin">sans-serif-thin</string>
+    <string name="dialog_permission_title">Grant Permissions</string>
+    <string name="dialog_permission_message">This app needs permission to use this feature. You can grant them in app settings.</string>
+    <string name="go_to_settings">GOTO SETTINGS</string>
 
 </resources>

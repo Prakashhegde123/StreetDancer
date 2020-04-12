@@ -1,10 +1,14 @@
 package com.example.street_dancer_beta10.Segments.Profile.UserFollowersFollowingsComponents;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +24,8 @@ import java.util.List;
 public class ProfileRecyclerViewFollowersFollowingAdapter extends RecyclerView.Adapter<ProfileRecyclerViewFollowersFollowingAdapter.MyViewHolder> {
 
     Context context;
+    Dialog dialog;
+
     private List<ProfileFollowersFollowingsModel> profileFollowersFollowingsModels;
     private boolean isFollowersFocused;
 
@@ -36,6 +42,9 @@ public class ProfileRecyclerViewFollowersFollowingAdapter extends RecyclerView.A
 
         View view = LayoutInflater.from(context).inflate(R.layout.recycler_view_profile_followers_followings_item, parent, false);
         MyViewHolder myViewHolder = new MyViewHolder(view);
+        dialog = new Dialog(context);
+        dialog.setContentView(R.layout.dialog_followers);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         return myViewHolder;
 
     }
@@ -51,6 +60,20 @@ public class ProfileRecyclerViewFollowersFollowingAdapter extends RecyclerView.A
         holder.username.setText(profileFollowersFollowingsModels.get(position).getUserName());
         holder.username_name.setText(profileFollowersFollowingsModels.get(position).getName());
         holder.profile.setImageResource(profileFollowersFollowingsModels.get(position).getUserProfile());
+
+        holder.item_followers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TextView dialog_name = (TextView) dialog.findViewById(R.id.dialog_name);
+                TextView dialog_status = (TextView) dialog.findViewById(R.id.dialog_status);
+                ImageView dialog_image = (ImageView) dialog.findViewById(R.id.dialog_image);
+                dialog_name.setText(profileFollowersFollowingsModels.get(position).getName());
+                dialog_status.setText(profileFollowersFollowingsModels.get(position).getUserName());
+                dialog_image.setImageResource(profileFollowersFollowingsModels.get(position).getUserProfile());
+                Toast.makeText(context, "Test Click " + String.valueOf(position), Toast.LENGTH_SHORT).show();
+                dialog.show();
+            }
+        });
 
         /*holder.followers_followings_item.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,6 +91,7 @@ public class ProfileRecyclerViewFollowersFollowingAdapter extends RecyclerView.A
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
+        private RelativeLayout item_followers;
         private TextView username;
         private TextView username_name;
         private TextView button;
@@ -76,7 +100,7 @@ public class ProfileRecyclerViewFollowersFollowingAdapter extends RecyclerView.A
 
         public MyViewHolder(View itemView) {
             super(itemView);
-
+            item_followers = (RelativeLayout) itemView.findViewById(R.id.followers_item_id);
             profile = (ImageView) itemView.findViewById(R.id.followers_following_profile);
             username = (TextView) itemView.findViewById(R.id.followers_following_username);
             button = (TextView) itemView.findViewById(R.id.button);

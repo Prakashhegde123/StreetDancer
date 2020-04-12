@@ -13,4 +13,14 @@
         <item name="colorControlNormal">@color/toolbar_back_button_indicator</item>
     </style>
 
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="ToolbarColoredBackArrow" parent="AppTheme">
+        <item name="android:textColorSecondary">@color/profile_default_tint</item>
+    </style>
+
+    <style name="SwitchTheme" parent="Theme.AppCompat.Light">
+        <item name="android:colorControlActivated">#FFF</item>
+    </style>
+
 </resources>

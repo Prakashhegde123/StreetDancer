@@ -10,11 +10,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.street_dancer_beta10.HomeActivity;
 import com.example.street_dancer_beta10.R;
+import com.example.street_dancer_beta10.Segments.Profile.UserFollowersFollowingsComponents.ViewPagerSetupFragment;
 import com.example.street_dancer_beta10.SharedComponents.Models.MediaObject;
 import com.example.street_dancer_beta10.SharedComponents.RecyclerView.VerticalSpacingItemDecorator;
 import com.example.street_dancer_beta10.SharedComponents.RecyclerView.VideoPlayerRecyclerAdapter;
@@ -27,6 +30,7 @@ public class HomeFragment extends Fragment {
     private VideoPlayerRecyclerView recyclerView;
     private VideoPlayerRecyclerAdapter adapter;
     private ArrayList<MediaObject> mediaObjects = new ArrayList<>();
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,9 +48,15 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         recyclerView = (VideoPlayerRecyclerView) view.findViewById(R.id.home_video_recycler_view);
+        
         getMedia();
         setAdapter();
+
+
+
     }
+
+
 
     private void getMedia() {
 

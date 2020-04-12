@@ -45,7 +45,6 @@ public class VideoPlayerRecyclerView extends RecyclerView {
 
 
 
-    // ENUMERATION CONSTANT TO CONTROL VOLUME
     private enum VolumeState {ON, OFF}
 
     // UI COMPONENTS

@@ -10,16 +10,19 @@ import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.RequestManager;
+import com.example.street_dancer_beta10.HomeActivity;
 import com.example.street_dancer_beta10.R;
 import com.example.street_dancer_beta10.SharedComponents.Models.MediaObject;
+import com.example.street_dancer_beta10.Segments.Profile.VisitedProfile.VisitedProfileFragment;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -29,6 +32,7 @@ import static androidx.core.content.ContextCompat.startActivity;
 public class VideoPlayerRecyclerAdapter extends RecyclerView.Adapter<VideoPlayerRecyclerAdapter.VideoPlayerViewHolder> {
 
     private ArrayList<MediaObject> mediaObjects;
+    Fragment fragment;
     private RequestManager requestManager;
     private Context context;
 
@@ -93,6 +97,28 @@ public class VideoPlayerRecyclerAdapter extends RecyclerView.Adapter<VideoPlayer
             startActivity(context, shareIntent, null);
 
         });
+
+        holder.visitedprofile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // SETTING HOME PAGE AS THE DEFAULT PAGE
+                fragment = new VisitedProfileFragment();
+                // MAKING CHANGES AND COMMITTING
+                HomeActivity.fragmentManager
+                        // BEGIN THE TRANSACTION
+                        .beginTransaction()
+                        // THE "fragment" WILL BE DISPLAYED IN THE "container_fragment"
+                        .replace(R.id.container_fragment, fragment)
+
+                        .addToBackStack(null)
+                        // COMMITTING THE CHANGES
+                        .commit();
+            }
+        });
+
+
+
+
     }
 
     @Override
@@ -108,6 +134,7 @@ public class VideoPlayerRecyclerAdapter extends RecyclerView.Adapter<VideoPlayer
         ImageView thumbnail, volumeControl;
         ProgressBar progressBar;
         View parent;
+        TextView visitedprofile;
         RequestManager requestManager;
         ImageView send_post;
         ToggleButton bookmark_post;
@@ -116,6 +143,8 @@ public class VideoPlayerRecyclerAdapter extends RecyclerView.Adapter<VideoPlayer
         public VideoPlayerViewHolder(@NonNull View itemView) {
             super(itemView);
             parent = itemView;
+
+            visitedprofile = itemView.findViewById(R.id.visited_profile);
             send_post = itemView.findViewById(R.id.send);
             media_container = itemView.findViewById(R.id.media_container);
             thumbnail = itemView.findViewById(R.id.thumbnail);

@@ -24,6 +24,7 @@
         android:layout_marginStart="15dp"
         android:text="pramod_0098"
         android:textSize="14dp"
+        android:fontFamily="@font/roboto_condensed_bold"
         android:textColor="@android:color/white"/>
 
     <TextView
@@ -36,6 +37,7 @@
         android:layout_marginStart="15dp"
         android:text="pramod_0098"
         android:textSize="12dp"
+        android:fontFamily="@font/roboto"
         android:textColor="@color/grey_white"/>
 
     <TextView
@@ -45,6 +47,7 @@
         android:gravity="center_vertical"
         android:layout_alignParentEnd="true"
         android:text="Remove"
+        android:fontFamily="@font/roboto_condensed_bold"
         android:textSize="14dp"
         android:textStyle="bold"
         android:textColor="@android:color/white"
