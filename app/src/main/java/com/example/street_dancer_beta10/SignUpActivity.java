@@ -27,6 +27,7 @@ public class SignUpActivity extends AppCompatActivity {
     RadioButton male, female;
     String gender;
     private Button button;
+    //new 1
     FirebaseUser user;
     FirebaseAuth firebaseAuth;
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
