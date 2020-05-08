@@ -34,13 +34,34 @@
 
     </androidx.appcompat.widget.Toolbar>
 
+
     <RelativeLayout
         android:layout_below="@+id/toolbar_search"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/fragment_background">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            />
+
     </RelativeLayout>
 
-
 </RelativeLayout>
+
+
+
+
+
+
+
+
+
+
+
+
