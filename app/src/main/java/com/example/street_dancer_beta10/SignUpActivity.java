@@ -87,6 +87,7 @@ public class SignUpActivity extends AppCompatActivity {
                     password.setError("The password or repassword entered is wrong");
                     return;
                 }
+                //
                 if (male.isChecked()) {
                     gender = "male";
                 }
