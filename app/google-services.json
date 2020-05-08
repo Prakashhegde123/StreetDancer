@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "800644618991",
+    "firebase_url": "https://streetdancersbeta.firebaseio.com",
+    "project_id": "streetdancersbeta",
+    "storage_bucket": "streetdancersbeta.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:800644618991:android:306d76f63166d5b693d91a",
+        "android_client_info": {
+          "package_name": "com.example.street_dancer_beta10"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "800644618991-3gh2fed0mt1ehj2a6imag7tvskamtvpc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.street_dancer_beta10",
+            "certificate_hash": "5126bbd46cf21e2052d3561650f6e0d3aa9c2c59"
+          }
+        },
+        {
+          "client_id": "800644618991-i9gogpjviueogjs17mvth7cpstr2s2af.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsmqZOSyokOQcXXwv7t3LNw1a__fg17Ew"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "800644618991-i9gogpjviueogjs17mvth7cpstr2s2af.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -47,6 +47,9 @@ import com.example.street_dancer_beta10.R;
 import com.example.street_dancer_beta10.Segments.Profile.UserFollowersFollowingsComponents.ViewPagerSetupFragment;
 import com.example.street_dancer_beta10.Segments.Profile.UserUploadComponents.ProfileUserUploadFragment;
 import com.example.street_dancer_beta10.SharedComponents.Models.MediaObject;
+import com.example.street_dancer_beta10.SignInActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -66,7 +69,7 @@ public class ProfileFragment extends Fragment {
     private TextView followers_linearLayout;
     private TextView following_linearlayout;
     private Fragment fragment;
-
+    FirebaseAuth firebaseAuth;
 
 
     @BindView(R.id.profile_pic_circular_image_view)
@@ -102,6 +105,9 @@ public class ProfileFragment extends Fragment {
                 fragment = new PrivacyFragment();
                 break;
             case R.id.logout:
+                firebaseAuth.signOut();
+                Intent intent = new Intent(getContext(), SignInActivity.class);
+                startActivity(intent);
                 Toast.makeText(getContext(), "Logout!", Toast.LENGTH_LONG).show();
                 break;
         }
@@ -125,6 +131,7 @@ public class ProfileFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         Log.d(TAG, "onViewCreated: inside on-created");
+        firebaseAuth = FirebaseAuth.getInstance();
     }
 
     @Override
