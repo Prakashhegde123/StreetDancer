@@ -85,6 +85,7 @@ public class SignUpActivity extends AppCompatActivity {
                 }
                 if (!(mpass.equals(mrepass))) {
                     password.setError("The password or repassword entered is wrong");
+                    return;
                 }
                 if (male.isChecked()) {
                     gender = "male";
@@ -94,7 +95,7 @@ public class SignUpActivity extends AppCompatActivity {
                 }
                 //validate
                 else if (!(mname.equals("")) && (!(mmail.equals(""))) && (!(mpass.equals(""))) && (!(mrepass.equals(""))) && (!(mphone.equals("")))
-                        && (!(mdob.equals("")))) {
+                        && (!(mdob.equals("")))&&mpass.equals(mrepass)) {
                     firebaseAuth.createUserWithEmailAndPassword(mmail, mpass)
                             .addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
                                 @Override
