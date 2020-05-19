@@ -50,6 +50,11 @@ import com.example.street_dancer_beta10.SharedComponents.Models.MediaObject;
 import com.example.street_dancer_beta10.SignInActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -70,6 +75,12 @@ public class ProfileFragment extends Fragment {
     private TextView following_linearlayout;
     private Fragment fragment;
     FirebaseAuth firebaseAuth;
+
+//    private FirebaseUser firebaseUser;
+//    String uid;
+//    DatabaseReference databaseReference;
+//    List<String> itemList;
+
 
 
     @BindView(R.id.profile_pic_circular_image_view)
@@ -158,6 +169,25 @@ public class ProfileFragment extends Fragment {
         followers_linearLayout = (TextView) view.findViewById(R.id.followers_id);
         following_linearlayout = (TextView) view.findViewById(R.id.following_id);
 
+//        firebaseUser =FirebaseAuth.getInstance().getCurrentUser();
+//        uid = firebaseUser.getUid();
+//        itemList = new ArrayList<>();
+//        databaseReference = FirebaseDatabase.getInstance().getReference();
+//
+//        databaseReference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                itemList.clear();
+//                String username = dataSnapshot.child(uid).child("name").getValue(String.class);
+//                itemList.add(username);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(Color.parseColor("#FFFFFF"));
@@ -227,6 +257,8 @@ public class ProfileFragment extends Fragment {
         });
 
     }
+
+
 
     private void setMedia() {
 

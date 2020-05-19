@@ -10,12 +10,15 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.github.ybq.android.spinkit.style.FadingCircle;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     private ProgressBar progressBar;
     private TextView textView;
+    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         textView = (TextView)findViewById(R.id.textview1);
+
+        firebaseAuth = FirebaseAuth.getInstance();
 
         // splash animation
         progressBar = (ProgressBar) findViewById(R.id.spin_kit);
@@ -36,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         textView.startAnimation(animation1);
         progressBar.startAnimation(progressDelay);
 
-        final Intent intent=new Intent(this, SignInActivity.class);
+        final Intent intent=new Intent(MainActivity.this, SignInActivity.class);
 
         Thread user =new Thread() {
             public void run() {
@@ -45,12 +50,19 @@ public class MainActivity extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } finally {
-                    startActivity(intent);
-                    finish();
+                    FirebaseUser currentuser = firebaseAuth.getCurrentUser();
+                    if (currentuser == null) {
+                        Intent loginIntent = new Intent(MainActivity.this, SignInActivity.class);
+                        startActivity(loginIntent);
+                        finish();
+                    } else {
+                        Intent mainIntent = new Intent(MainActivity.this, HomeActivity.class);
+                        startActivity(mainIntent);
+                        finish();
+                    }
                 }
             }
-        };
-        user.start();
+        }; user.start();
 
     }
 
