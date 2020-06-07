@@ -283,7 +283,7 @@ public class ProfileFragment extends Fragment {
                 if (getContext() == null){
                     return;
                 }
-                ProfileFollowersFollowingsModel user = dataSnapshot.getValue(ProfileFollowersFollowingsModel.class);
+                ProfileModel user = dataSnapshot.getValue(ProfileModel.class);
 
                 fullname.setText(user.getName());
 

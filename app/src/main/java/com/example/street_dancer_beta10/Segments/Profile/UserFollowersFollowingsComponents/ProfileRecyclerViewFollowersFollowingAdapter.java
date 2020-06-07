@@ -80,33 +80,33 @@ public class ProfileRecyclerViewFollowersFollowingAdapter extends RecyclerView.A
 
         holder.profile.setImageResource(profileFollowersFollowingsModels.get(position).getUserProfile());
 
-        holder.item_followers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                TextView dialog_name = (TextView) dialog.findViewById(R.id.dialog_name);
-                TextView dialog_status = (TextView) dialog.findViewById(R.id.dialog_status);
-                ImageView dialog_image = (ImageView) dialog.findViewById(R.id.dialog_image);
-                dialog_name.setText(profileFollowersFollowingsModels.get(position).getName());
-                dialog_status.setText(profileFollowersFollowingsModels.get(position).getUserName());
-                dialog_image.setImageResource(profileFollowersFollowingsModels.get(position).getUserProfile());
-                Toast.makeText(context, "Test Click " + String.valueOf(position), Toast.LENGTH_SHORT).show();
-                dialog.show();
-
-                if (isFragment) {
-                    SharedPreferences.Editor editor = context.getSharedPreferences("PREFS", MODE_PRIVATE).edit();
-                    editor.putString("profileid", user.getId());
-                    editor.apply();
-
-                    ((FragmentActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.container_fragment,
-                            new ProfileFragment()).commit();
-                } else {
-                    Intent intent = new Intent(context, HomeActivity.class);
-                    intent.putExtra("publisherid", user.getId());
-                    context.startActivity(intent);
-                }
-            }
-        });
+//        holder.item_followers.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                TextView dialog_name = (TextView) dialog.findViewById(R.id.dialog_name);
+//                TextView dialog_status = (TextView) dialog.findViewById(R.id.dialog_status);
+//                ImageView dialog_image = (ImageView) dialog.findViewById(R.id.dialog_image);
+//                dialog_name.setText(profileFollowersFollowingsModels.get(position).getName());
+//                dialog_status.setText(profileFollowersFollowingsModels.get(position).getUserName());
+//                dialog_image.setImageResource(profileFollowersFollowingsModels.get(position).getUserProfile());
+//                Toast.makeText(context, "Test Click " + String.valueOf(position), Toast.LENGTH_SHORT).show();
+//                dialog.show();
+//
+//                if (isFragment) {
+//                    SharedPreferences.Editor editor = context.getSharedPreferences("PREFS", MODE_PRIVATE).edit();
+//                    editor.putString("profileid", user.getId());
+//                    editor.apply();
+//
+//                    ((FragmentActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.container_fragment,
+//                            new ProfileFragment()).commit();
+//                } else {
+//                    Intent intent = new Intent(context, HomeActivity.class);
+//                    intent.putExtra("publisherid", user.getId());
+//                    context.startActivity(intent);
+//                }
+//            }
+//        });
 
         /*holder.followers_followings_item.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -27,6 +27,7 @@ public class HomeActivity extends AppCompatActivity {
 private String email;
 
     FirebaseAuth firebaseAuth;
+    private FirebaseUser user;
 
 
 
@@ -153,7 +154,13 @@ private String email;
                             }
                             break;
                         case R.id.bottom_nav_upload:
-                            fragment = new UploadFragment();
+                            user = FirebaseAuth.getInstance().getCurrentUser();
+                            if(user != null) {
+                                fragment = new UploadFragment();
+                            }
+                            else{
+                                fragment = new DefaultFragment();
+                            }
                             // ADD THE MENU-ITEM TO THE STACK, IF AND ONLY IF "onNavigationItemSelected"
                             // METHOD IS CALLED CLICKING ON THE NAVIGATION BAR
                             if(isBackPressed) {
@@ -175,10 +182,16 @@ private String email;
                             }
                             break;
                         case R.id.bottom_nav_profile:
-                            SharedPreferences.Editor editor = getSharedPreferences("PREFS", MODE_PRIVATE).edit();
-                            editor.putString("profileid", FirebaseAuth.getInstance().getCurrentUser().getUid());
-                            editor.apply();
-                            fragment = new ProfileFragment();
+                            user = FirebaseAuth.getInstance().getCurrentUser();
+                            if(user != null) {
+                                SharedPreferences.Editor editor = getSharedPreferences("PREFS", MODE_PRIVATE).edit();
+                                editor.putString("profileid", FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                editor.apply();
+                                fragment = new ProfileFragment();
+                            }
+                            else{
+                                fragment = new DefaultFragment();
+                            }
                             // ADD THE MENU-ITEM TO THE STACK, IF AND ONLY IF "onNavigationItemSelected"
                             // METHOD IS CALLED CLICKING ON THE NAVIGATION BAR
                             if(isBackPressed) {
