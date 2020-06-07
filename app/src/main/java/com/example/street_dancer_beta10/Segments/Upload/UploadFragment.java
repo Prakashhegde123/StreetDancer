@@ -122,6 +122,7 @@ public class UploadFragment extends Fragment {
     //
     private void uploadVideo(){
 
+
         Uri file = Uri.fromFile(new File(getPath(videoURI)));
         mStorageRef = FirebaseStorage.getInstance().getReference().child("videos");
         Toast.makeText(getContext(), "mStorageRef: " + mStorageRef, Toast.LENGTH_SHORT).show();
