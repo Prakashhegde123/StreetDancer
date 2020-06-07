@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -14,13 +16,17 @@ import com.example.street_dancer_beta10.Segments.Profile.ProfileFragment;
 import com.example.street_dancer_beta10.Segments.Search.SearchFragment;
 import com.example.street_dancer_beta10.Segments.Upload.UploadFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
+private String email;
 
+    FirebaseAuth firebaseAuth;
 
 
 
@@ -68,7 +74,29 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        Intent intent = getIntent();
+        email = intent.getStringExtra("email");
+
         bottomNavigationView = (BottomNavigationView)findViewById(R.id.bottom_navigation_bar);
+        bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
+
+
+        Bundle Bundleintent = getIntent().getExtras();
+        if (Bundleintent != null){
+            String publisher = Bundleintent.getString("publisherid");
+
+            SharedPreferences.Editor editor = getSharedPreferences("PREFS", MODE_PRIVATE).edit();
+            editor.putString("profileid", publisher);
+            editor.apply();
+
+            getSupportFragmentManager().beginTransaction().replace(R.id.container_fragment,
+                    new ProfileFragment()).commit();
+        } else {
+            getSupportFragmentManager().beginTransaction().replace(R.id.container_fragment,
+                    new HomeFragment()).commit();
+        }
+
+
 
         //spaceNavigationView = (SpaceNavigationView) findViewById(R.id.space);
 
@@ -91,176 +119,88 @@ public class HomeActivity extends AppCompatActivity {
         stack.add(R.id.bottom_nav_home);
 
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-                switch (item.getItemId()){
-                    case R.id.bottom_nav_home :
-                        fragment = new HomeFragment();
-
-                        // ADD THE MENU-ITEM TO THE STACK, IF AND ONLY IF "onNavigationItemSelected"
-                        // METHOD IS CALLED CLICKING ON THE NAVIGATION BAR
-                        if(isBackPressed) {
-                            changeViewOnBackButtonClick(fragment);
-                        }else{
-                            stack.add(R.id.bottom_nav_home);
-                            changeViewOnClick(fragment);
-                        }
-                        //Toast.makeText(getApplicationContext(), "home called ", Toast.LENGTH_SHORT).show();
-                        break;
-
-                    case R.id.bottom_nav_search :
-                        fragment = new SearchFragment();
-
-                        // ADD THE MENU-ITEM TO THE STACK, IF AND ONLY IF "onNavigationItemSelected"
-                        // METHOD IS CALLED CLICKING ON THE NAVIGATION BAR
-                        if(isBackPressed) {
-                            changeViewOnBackButtonClick(fragment);
-                        }else{
-                            stack.add(R.id.bottom_nav_search);
-                            changeViewOnClick(fragment);
-                        }
-                        //Toast.makeText(getApplicationContext(), "search called ", Toast.LENGTH_SHORT).show();
-                        break;
-
-                    case R.id.bottom_nav_upload :
-                        fragment = new UploadFragment();
-
-
-
-                        // ADD THE MENU-ITEM TO THE STACK, IF AND ONLY IF "onNavigationItemSelected"
-                        // METHOD IS CALLED CLICKING ON THE NAVIGATION BAR
-                        if(isBackPressed) {
-                            changeViewOnBackButtonClick(fragment);
-                        }else{
-                            stack.add(R.id.bottom_nav_upload);
-                            changeViewOnClick(fragment);
-                        }
-                        //Toast.makeText(getApplicationContext(), "upload called ", Toast.LENGTH_SHORT).show();
-                        break;
-
-                    case R.id.bottom_nav_notification :
-                        fragment = new NotificationFragment();
-
-                        // ADD THE MENU-ITEM TO THE STACK, IF AND ONLY IF "onNavigationItemSelected"
-                        // METHOD IS CALLED CLICKING ON THE NAVIGATION BAR
-                        if(isBackPressed) {
-                            changeViewOnBackButtonClick(fragment);
-                        }else{
-                            stack.add(R.id.bottom_nav_notification);
-                            changeViewOnClick(fragment);
-                        }
-                        //Toast.makeText(getApplicationContext(), "notification called ", Toast.LENGTH_SHORT).show();
-                        break;
-
-                    case R.id.bottom_nav_profile :
-                        fragment = new ProfileFragment();
-
-                        // ADD THE MENU-ITEM TO THE STACK, IF AND ONLY IF "onNavigationItemSelected"
-                        // METHOD IS CALLED CLICKING ON THE NAVIGATION BAR
-                        if(isBackPressed) {
-                            changeViewOnBackButtonClick(fragment);
-                        }else{
-                            stack.add(R.id.bottom_nav_profile);
-                            changeViewOnClick(fragment);
-                        }
-                        //Toast.makeText(getApplicationContext(), "profile called ", Toast.LENGTH_SHORT).show();
-                        break;
-                }
-
-                //===========================================
-
-                /*// MAKING CHANGES AND COMMITTING
-                HomeActivity.fragmentManager
-                        // BEGIN THE TRANSACTION
-                        .beginTransaction()
-                        // THE "fragment" WILL BE DISPLAYED IN THE "container_fragment"
-                        .replace(R.id.container_fragment, fragment)
-
-                        .addToBackStack(null)
-                        // COMMITTING THE CHANGES
-                        .commit();*/
-
-                //=============================================
-                return true;
-            }
-        });
-
-        // ============================================================
-
-        /*spaceNavigationView.initWithSaveInstanceState(savedInstanceState);
-        spaceNavigationView.setElevation((float) 1.5);
-
-        // ADDING ITEM'S TO BOTTOM NAVIGATION BAR
-        spaceNavigationView.addSpaceItem(new SpaceItem("", R.drawable.nav_home_button));
-        spaceNavigationView.addSpaceItem(new SpaceItem("", R.drawable.nav_search_button));
-        spaceNavigationView.addSpaceItem(new SpaceItem("", R.drawable.nav_favorite_button));
-        spaceNavigationView.addSpaceItem(new SpaceItem("", R.drawable.nav_profile_button));
-
-        // SETTING ON CLICK LISTENER TO THE ITEM'S IN BOTTOM NAVIGATION BAR
-        spaceNavigationView.setSpaceOnClickListener(new SpaceOnClickListener() {
-
-            @Override
-            public void onCentreButtonClick() {
-
-                spaceNavigationView.setCentreButtonSelectable(true);
-
-                // WHEN CENTER BUTTON IS CLICKED
-                fragment = new ProfileFragment();
-                // MAKING CHANGES AND COMMITTING
-                HomeActivity.fragmentManager
-                        // BEGIN THE TRANSACTION
-                        .beginTransaction()
-                        // THE "fragment" WILL BE DISPLAYED IN THE "container_fragment"
-                        .replace(R.id.container_fragment, fragment)
-
-                        .addToBackStack(null)
-                        // COMMITTING THE CHANGES
-                        .commit();
-            }
-
-            @Override
-            public void onItemClick(int itemIndex, String itemName) {
-
-                // GENERATING THE FRAGMENT ACCORDING TO THE ITEM CLICKED FROM THE BOTTOM NAVIGATION BAR
-                switch (itemIndex){
-                    case 0: // GENERATING HOME FRAGMENT
-                        fragment = new HomeFragment();
-                        break;
-                    case 1: // GENERATING SEARCH FRAGMENT
-                        fragment = new SearchFragment();
-                        break;
-                    case 2: // GENERATING NOTIFICATION FRAGMENT
-                        fragment = new NotificationFragment();
-                        break;
-                    case 3: // GENERATING PROFILE FRAGMENT
-                        fragment = new ProfileFragment();
-                        break;
-                }
-
-                // MAKING CHANGES AND COMMITTING
-                HomeActivity.fragmentManager
-                        // BEGIN THE TRANSACTION
-                        .beginTransaction()
-                        // THE "fragment" WILL BE DISPLAYED IN THE "container_fragment"
-                        .replace(R.id.container_fragment, fragment)
-
-                        .addToBackStack(null)
-                        // COMMITTING THE CHANGES
-                        .commit();
-            }
-
-            @Override
-            public void onItemReselected(int itemIndex, String itemName) {
-                Toast.makeText(HomeActivity.this, itemIndex + " " + itemName, Toast.LENGTH_SHORT).show();
-            }
-        });*/
-
-        // ============================================================
 
 
     }
+
+    private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    switch (item.getItemId()){
+                        case R.id.bottom_nav_home:
+                            fragment = new HomeFragment();
+                            // ADD THE MENU-ITEM TO THE STACK, IF AND ONLY IF "onNavigationItemSelected"
+                            // METHOD IS CALLED CLICKING ON THE NAVIGATION BAR
+                            if(isBackPressed) {
+                                changeViewOnBackButtonClick(fragment);
+                            }else{
+                                stack.add(R.id.bottom_nav_home);
+                                changeViewOnClick(fragment);
+                            }
+                            break;
+                        case R.id.bottom_nav_search:
+                            fragment = new SearchFragment();
+
+                            // ADD THE MENU-ITEM TO THE STACK, IF AND ONLY IF "onNavigationItemSelected"
+                            // METHOD IS CALLED CLICKING ON THE NAVIGATION BAR
+                            if(isBackPressed) {
+                                changeViewOnBackButtonClick(fragment);
+                            }else{
+                                stack.add(R.id.bottom_nav_search);
+                                changeViewOnClick(fragment);
+                            }
+                            break;
+                        case R.id.bottom_nav_upload:
+                            fragment = new UploadFragment();
+                            // ADD THE MENU-ITEM TO THE STACK, IF AND ONLY IF "onNavigationItemSelected"
+                            // METHOD IS CALLED CLICKING ON THE NAVIGATION BAR
+                            if(isBackPressed) {
+                                changeViewOnBackButtonClick(fragment);
+                            }else{
+                                stack.add(R.id.bottom_nav_upload);
+                                changeViewOnClick(fragment);
+                            }
+                            break;
+                        case R.id.bottom_nav_notification:
+                            fragment = new NotificationFragment();
+                            // ADD THE MENU-ITEM TO THE STACK, IF AND ONLY IF "onNavigationItemSelected"
+                            // METHOD IS CALLED CLICKING ON THE NAVIGATION BAR
+                            if(isBackPressed) {
+                                changeViewOnBackButtonClick(fragment);
+                            }else{
+                                stack.add(R.id.bottom_nav_notification);
+                                changeViewOnClick(fragment);
+                            }
+                            break;
+                        case R.id.bottom_nav_profile:
+                            SharedPreferences.Editor editor = getSharedPreferences("PREFS", MODE_PRIVATE).edit();
+                            editor.putString("profileid", FirebaseAuth.getInstance().getCurrentUser().getUid());
+                            editor.apply();
+                            fragment = new ProfileFragment();
+                            // ADD THE MENU-ITEM TO THE STACK, IF AND ONLY IF "onNavigationItemSelected"
+                            // METHOD IS CALLED CLICKING ON THE NAVIGATION BAR
+                            if(isBackPressed) {
+                                changeViewOnBackButtonClick(fragment);
+                            }else{
+                                stack.add(R.id.bottom_nav_profile);
+                                changeViewOnClick(fragment);
+                            }
+                            break;
+                    }
+                    if (fragment != null) {
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container_fragment,
+                                fragment).commit();
+                    }
+
+                    return true;
+                }
+            };
+
+
+
+
 
     private void changeViewOnClick(Fragment fragment){
 

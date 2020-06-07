@@ -3,6 +3,7 @@ package com.example.street_dancer_beta10.Segments.Profile;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
@@ -65,6 +66,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class ProfileFragment extends Fragment {
     private static final String TAG = "ProfileFragment";
 
@@ -75,6 +78,21 @@ public class ProfileFragment extends Fragment {
     private TextView following_linearlayout;
     private Fragment fragment;
     FirebaseAuth firebaseAuth;
+    private TextView fullname;
+    private TextView username;
+    private ImageView profileImage;
+
+    private TextView followersFollowingUsername;
+    private TextView followersFollowingName;
+    private TextView followersFollowingProfile;
+
+    FirebaseUser firebaseUser;
+    String profileid;
+
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
+    private static final String USERS = "Users";
+    private String email;
 
 //    private FirebaseUser firebaseUser;
 //    String uid;
@@ -150,6 +168,12 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
+
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        SharedPreferences prefs = getContext().getSharedPreferences("PREFS", MODE_PRIVATE);
+        profileid = prefs.getString("profileid", "none");
+
 //        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar_profile);
 //        toolbar.inflateMenu(R.menu.my_menu);
 //        if(toolbar != null) {
@@ -165,28 +189,21 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.d(TAG, "onViewCreated: inside on-view-created");
+
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_profile_id);
         followers_linearLayout = (TextView) view.findViewById(R.id.followers_id);
         following_linearlayout = (TextView) view.findViewById(R.id.following_id);
 
-//        firebaseUser =FirebaseAuth.getInstance().getCurrentUser();
-//        uid = firebaseUser.getUid();
-//        itemList = new ArrayList<>();
-//        databaseReference = FirebaseDatabase.getInstance().getReference();
-//
-//        databaseReference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                itemList.clear();
-//                String username = dataSnapshot.child(uid).child("name").getValue(String.class);
-//                itemList.add(username);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
+        followersFollowingName = (TextView) view.findViewById(R.id.followers_following_name);
+        followersFollowingUsername = (TextView) view.findViewById(R.id.followers_following_username);
+        followersFollowingProfile = (TextView) view.findViewById(R.id.followers_following_profile);
+
+        fullname = view.findViewById(R.id.fullname);
+        username = view.findViewById(R.id.username);
+        profileImage = view.findViewById(R.id.profile_pic_circular_image_view);
+
+
+
 
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
@@ -255,8 +272,29 @@ public class ProfileFragment extends Fragment {
                 Log.d(TAG, "onClick: ProfileFragment " + position);
             }
         });
-
+        userInfo();
     }
+
+    private void userInfo(){
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(profileid);
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (getContext() == null){
+                    return;
+                }
+                ProfileFollowersFollowingsModel user = dataSnapshot.getValue(ProfileFollowersFollowingsModel.class);
+
+                fullname.setText(user.getName());
+
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 
 
 

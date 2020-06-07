@@ -1,15 +1,28 @@
-package com.example.street_dancer_beta10.Segments.Profile.Model;
+package com.example.street_dancer_beta10.Segments.Profile;
 
 public class    ProfileFollowersFollowingsModel {
 
+    private String id;
     private String UserName;
     private String Name;
     private int UserProfile;
 
-    public ProfileFollowersFollowingsModel(String UserName, String Name, int UserProfile) {
+    public ProfileFollowersFollowingsModel(String id,String UserName, String Name, int UserProfile) {
+        this.id=id;
         this.UserName = UserName;
         this.Name = Name;
         this.UserProfile = UserProfile;
+    }
+
+    public ProfileFollowersFollowingsModel() {
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getUserName() {

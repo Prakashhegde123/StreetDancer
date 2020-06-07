@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private ProgressBar progressBar;
     private TextView textView;
+
     private FirebaseAuth firebaseAuth;
 
     @Override
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         textView.startAnimation(animation1);
         progressBar.startAnimation(progressDelay);
 
-        final Intent intent=new Intent(MainActivity.this, SignInActivity.class);
+        final Intent loginIntent  = new Intent(MainActivity.this, SignInActivity.class);
 
         Thread user =new Thread() {
             public void run() {
@@ -51,18 +52,21 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 } finally {
                     FirebaseUser currentuser = firebaseAuth.getCurrentUser();
-                    if (currentuser == null) {
-                        Intent loginIntent = new Intent(MainActivity.this, SignInActivity.class);
+                    if(currentuser==null){
+                        Intent loginIntent  = new Intent(MainActivity.this, SignInActivity.class);
                         startActivity(loginIntent);
                         finish();
-                    } else {
-                        Intent mainIntent = new Intent(MainActivity.this, HomeActivity.class);
+                    }
+
+                    else {
+                        Intent mainIntent  = new Intent(MainActivity.this, HomeActivity.class);
                         startActivity(mainIntent);
                         finish();
                     }
                 }
             }
-        }; user.start();
+        };
+        user.start();
 
     }
 

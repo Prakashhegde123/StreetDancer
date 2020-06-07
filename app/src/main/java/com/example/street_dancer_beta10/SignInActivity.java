@@ -2,6 +2,8 @@ package com.example.street_dancer_beta10;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.street_dancer_beta10.Segments.Profile.ProfileFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -46,6 +49,10 @@ public class SignInActivity extends AppCompatActivity {
         pass = (EditText) findViewById(R.id.password_edit_text_sign_in);
         firebaseAuth = FirebaseAuth.getInstance();
 
+//        if (firebaseAuth.getCurrentUser() != null) {
+//            updateUI(firebaseAuth.getCurrentUser());
+//        }
+
         createAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,6 +67,8 @@ public class SignInActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
                 startActivity(intent);
+//                FirebaseUser user = firebaseAuth.getCurrentUser();
+//                updateUI(user);
             }
         });
 
@@ -109,6 +118,10 @@ public class SignInActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 checkEmailVerification();
+                                reff = FirebaseDatabase.getInstance().getReference().child("Users")
+                                        .child(firebaseAuth.getCurrentUser().getUid());
+//                                FirebaseUser user = firebaseAuth.getCurrentUser();
+//                                updateUI(user);
                             } else {
                                 Log.d(TAG, "onFailed: " + task.getException());
                                 Toast.makeText(SignInActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
@@ -139,6 +152,7 @@ public class SignInActivity extends AppCompatActivity {
         if (flag) {
             Toast.makeText(SignInActivity.this, "Login successfull", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
+
             startActivity(intent);
             finish();
         } else {
@@ -146,5 +160,36 @@ public class SignInActivity extends AppCompatActivity {
             firebaseAuth.signOut();
         }
     }
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        // Check if user is signed in (non-null) and update UI accordingly.
+//        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+//        if (currentUser != null) {
+//            updateUI(currentUser);
+//        }
+//    }
+//
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        // Check if user is signed in (non-null) and update UI accordingly.
+//        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+//        if (currentUser != null) {
+//            updateUI(currentUser);
+//        }
+//    }
+//    public void updateUI(FirebaseUser currentUser) {
+//        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+//        intent.putExtra("email", currentUser.getEmail());
+//        startActivity(intent);
+////        Fragment fragment = new ProfileFragment();
+////        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+////        transaction.replace(R.id.containerprofile,fragment);
+////        transaction.addToBackStack(null);
+////        transaction.commit();
+//
+//
+//    }
 
 }

@@ -2,7 +2,7 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/container"
+    android:id="@+id/containerprofile"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000"
@@ -20,7 +20,23 @@
             app:theme="@style/ToolbarColoredBackArrow"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            app:popupTheme="@style/AppTheme.PopupOverlay" >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:maxLines="1"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textStyle="bold"
+                    android:id="@+id/username"/>
+
+            </RelativeLayout>
+
+        </androidx.appcompat.widget.Toolbar>
 
         <ImageView
             android:layout_below="@id/toolbar"
@@ -57,28 +73,27 @@
 <!--            android:layout_marginLeft="110dp" />-->
 
         <TextView
-            android:id="@+id/profile_name"
+            android:id="@+id/fullname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/profile_pic_circular_image_view"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/roboto_condensed_bold"
-            android:text="Prakash Hegde208"
             android:textColor="#fff"
             android:textSize="28sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="PrakashHegde208"
-            android:id="@+id/profile_sub_text"
-            android:fontFamily="@font/roboto_condensed_bold"
-            android:layout_below="@id/profile_name"
-            android:textColor="#A6ACAF"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp" />
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="PrakashHegde208"-->
+<!--            android:id="@+id/profile_sub_text"-->
+<!--            android:fontFamily="@font/roboto_condensed_bold"-->
+<!--            android:layout_below="@id/profile_name"-->
+<!--            android:textColor="#A6ACAF"-->
+<!--            android:layout_marginLeft="20dp"-->
+<!--            android:layout_marginTop="10dp" />-->
 
         <LinearLayout
             android:id="@+id/parent"
@@ -89,7 +104,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="40dp"
-            android:layout_below="@id/profile_sub_text">
+            android:layout_below="@id/fullname">
 
             <TextView
                 android:layout_width="wrap_content"
