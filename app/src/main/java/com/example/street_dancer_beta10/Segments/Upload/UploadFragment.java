@@ -7,22 +7,14 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.MediaController;
-import android.widget.RelativeLayout;
-import android.widget.Switch;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -34,37 +26,40 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.street_dancer_beta10.R;
-import com.luseen.spacenavigation.SpaceNavigationView;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import static android.app.Activity.RESULT_CANCELED;
 
+
 public class UploadFragment extends Fragment {
 
-
-    private static final String VIDEO_SAMPLE = "tacoma_narrows";
-    private static final int PERMISSION_REQUEST_CODE = 200;
+    //WIDGETS
     private VideoView videoView;
-    private static final String VIDEO_DIRECTORY = "/demonuts";
-    private int GALLERY = 1, CAMERA = 2;
+    private Button buttonUpload;
 
-    private static final int GALLERY_REQUEST_CODE =2 ;
-    private Uri videouri = null;
-    private boolean isRecording = false;
-    private Fragment fragment;
-    private SpaceNavigationView spaceNavigationView;
-    private static final String TAG = "HomePage";
-    public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 7;
+    // VARS
+    private Uri videoURI = null;
+
+    // FIREBASE VARS
+    private StorageReference mStorageRef;
+
+    private static final String VIDEO_DIRECTORY = "StreetDances";
+    private static final int GALLERY = 1;
+    private static final int CAMERA = 2;
+    private static final int MY_PERMISSIONS_REQUEST_CAMERA = 0;
 
 
     @Override
@@ -74,104 +69,21 @@ public class UploadFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-
-
-        if (checkPermission()) {
-            //main logic or main code
-            showPictureDialog();
-            // . write your main code to execute, It will execute if the permission is already given.
-
-        } else {
-            requestPermission();
-        }
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_upload, container, false);
+        View view = inflater.inflate(R.layout.fragment_upload, container, false);
+        return view;
     }
-
-
-    //permissions
-    private boolean checkPermission() {
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
-            // Permission is not granted
-            return false;
-        }
-        return true;
-    }
-
-    private void requestPermission() {
-
-        ActivityCompat.requestPermissions(getActivity(),
-                new String[]{Manifest.permission.CAMERA},
-                PERMISSION_REQUEST_CODE);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case PERMISSION_REQUEST_CODE:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(getActivity().getApplicationContext(), "Permission Granted", Toast.LENGTH_SHORT).show();
-
-                    // main logic
-                } else {
-                    Toast.makeText(getActivity().getApplicationContext(), "Permission Denied", Toast.LENGTH_SHORT).show();
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA)
-                                != PackageManager.PERMISSION_GRANTED) {
-                            showMessageOKCancel("You need to allow access permissions",
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                                requestPermission();
-                                            }
-                                        }
-                                    });
-                        }
-                    }
-
-                }
-                break;
-        }
-    }
-
-    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(getContext())
-                .setMessage(message)
-                .setPositiveButton("OK", okListener)
-                .setNegativeButton("Cancel", null)
-                .create()
-                .show();
-    }
-
-
-
-
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        videoView = view.findViewById(R.id.video_view_upload);
+        buttonUpload = view.findViewById(R.id.button_upload);
 
-        videoView = (VideoView) view.findViewById(R.id.vv);
-        RelativeLayout layout = (RelativeLayout)view.findViewById(R.id.relative_layout);
-        Switch sb = new Switch(getContext());
+        //
+        showUploadOptions();
 
-
-        Switch sw = (Switch) view.findViewById(R.id.switch1);
-        sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    // The toggle is enabled
-                } else {
-                    // The toggle is disabled
-                }
-            }
-        });
-
-
+        //
         MediaController controller = new MediaController(getContext());
         controller.setAnchorView(this.videoView);
         controller.setMediaPlayer(this.videoView);
@@ -180,6 +92,7 @@ public class UploadFragment extends Fragment {
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
+
                 mp.setOnVideoSizeChangedListener(new MediaPlayer.OnVideoSizeChangedListener() {
                     @Override
                     public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
@@ -191,75 +104,204 @@ public class UploadFragment extends Fragment {
             }
         });
 
+        //
+        buttonUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //
+                if(videoURI != null) {
+                    Toast.makeText(getContext(), getPath(videoURI), Toast.LENGTH_SHORT).show();
+                    uploadVideo();
+                }else {
+                    Toast.makeText(getContext(), "Select a video to upload", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
 
+    //
+    private void uploadVideo(){
+
+        Uri file = Uri.fromFile(new File(getPath(videoURI)));
+        mStorageRef = FirebaseStorage.getInstance().getReference().child("videos");
+        Toast.makeText(getContext(), "mStorageRef: " + mStorageRef, Toast.LENGTH_SHORT).show();
+        buttonUpload.setText("uploading");
+
+        mStorageRef.putFile(file)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // Get a URL to the uploaded content
+                        Toast.makeText(getContext(), videoURI.toString(), Toast.LENGTH_LONG).show();
+                        buttonUpload.setText("upload");
+                        //Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle unsuccessful uploads
+                        Toast.makeText(getContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
+                        buttonUpload.setText("upload");
+                    }
+                });
+
+                /*
+
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getContext(),"Upload Failed: " + e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                    }
+
+                })
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                // Write a message to the database
+                                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                DatabaseReference myRef = database.getReference("videos");
+
+                                //taskSnapshot.get
+                                Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                                myRef.setValue(downloadUrl.toString())
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Toast.makeText(getContext(), "Successfully uploaded", Toast.LENGTH_LONG).show();
+
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(getContext(), "Error happened during the upload process", Toast.LENGTH_LONG).show();
+
+                                            }
+                                        });
+                                );
+
+                */
 
     }
 
+    //
+    private void showUploadOptions(){
+        String[] uploadOptions = {"Select video from gallery", "Record video from camera" };
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Select Action");
 
-    private void showPictureDialog(){
-        AlertDialog.Builder pictureDialog = new AlertDialog.Builder(getContext());
-        pictureDialog.setTitle("Select Action");
-        String[] pictureDialogItems = {
-                "Select video from gallery",
-                "Record video from camera" };
-        pictureDialog.setItems(pictureDialogItems,
+        builder.setItems(
+                uploadOptions,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
                         switch (which) {
                             case 0:
-                                chooseVideoFromGallary();
+                                chooseVideoFromGallery();
                                 break;
+
                             case 1:
                                 takeVideoFromCamera();
                                 break;
                         }
                     }
-                });
-        pictureDialog.show();
+                }
+        );
+
+        builder.show();
     }
 
-    public void chooseVideoFromGallary() {
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
-
-        startActivityForResult(galleryIntent, GALLERY);
+    //
+    public void chooseVideoFromGallery() {
+        if(checkPermission()){
+            Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(galleryIntent, GALLERY);
+        }else {
+            requestPermissions();
+        }
     }
 
+
+    //
     private void takeVideoFromCamera() {
-        Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 120);
-        startActivityForResult(intent, CAMERA);
-
+        if(checkPermission()){
+            Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+            intent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 120);
+            startActivityForResult(intent, CAMERA);
+        }else {
+            requestPermissions();
+        }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    //
+    private boolean checkPermission() {
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            return false;
+        }
+        return true;
+    }
 
-        Log.d("result",""+resultCode);
+    //
+    private void requestPermissions(){
+        if (ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Permission is not granted
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                    Manifest.permission.CAMERA)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                // No explanation needed; request the permission
+                ActivityCompat.requestPermissions(
+                        getActivity(),
+                        new String[]{Manifest.permission.CAMERA},
+                        MY_PERMISSIONS_REQUEST_CAMERA
+                );
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        } else {
+            // Permission has already been granted
+        }
+    }
+
+    //
+    @Override
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if (resultCode == RESULT_CANCELED) {
-            Log.d("what","cancle");
             return;
         }
-        if (requestCode == GALLERY) {
-            Log.d("what","gale");
-            if (data != null) {
-                Uri contentURI = data.getData();
 
-                String selectedVideoPath = getPath(contentURI);
-                Log.d("path",selectedVideoPath);
+        if (requestCode == GALLERY) {
+
+            if (data != null) {
+                videoURI = data.getData();
+
+                String selectedVideoPath = getPath(videoURI);
+
                 saveVideoToInternalStorage(selectedVideoPath);
-                videoView.setVideoURI(contentURI);
+                videoView.setVideoURI(videoURI);
                 videoView.requestFocus();
                 videoView.start();
-
             }
 
         } else if (requestCode == CAMERA) {
             Uri contentURI = data.getData();
+
             String recordedVideoPath = getPath(contentURI);
-            Log.d("frrr",recordedVideoPath);
+
             saveVideoToInternalStorage(recordedVideoPath);
             videoView.setVideoURI(contentURI);
             videoView.requestFocus();
@@ -267,24 +309,24 @@ public class UploadFragment extends Fragment {
         }
     }
 
-    private void saveVideoToInternalStorage (String filePath) {
 
-        File newfile;
+    //
+    private void saveVideoToInternalStorage (String filePath) {
+        File newFile;
 
         try {
 
             File currentFile = new File(filePath);
             File wallpaperDirectory = new File(Environment.getExternalStorageDirectory() + VIDEO_DIRECTORY);
-            newfile = new File(wallpaperDirectory, Calendar.getInstance().getTimeInMillis() + ".mp4");
+            newFile = new File(wallpaperDirectory, Calendar.getInstance().getTimeInMillis() + ".mp4");
 
             if (!wallpaperDirectory.exists()) {
                 wallpaperDirectory.mkdirs();
             }
 
             if(currentFile.exists()){
-
                 InputStream in = new FileInputStream(currentFile);
-                OutputStream out = new FileOutputStream(newfile);
+                OutputStream out = new FileOutputStream(newFile);
 
                 // Copy the bits from instream to outstream
                 byte[] buf = new byte[1024];
@@ -292,33 +334,61 @@ public class UploadFragment extends Fragment {
 
                 while ((len = in.read(buf)) > 0) {
                     out.write(buf, 0, len);
+
                 }
                 in.close();
                 out.close();
-                Log.v("vii", "Video file saved successfully.");
+                // Video file saved successfully
+
             }else{
-                Log.v("vii", "Video saving failed. Source file missing.");
+                // Video saving failed. Source file missing.
+
             }
+
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+
+    //
+    private String getPath(Uri uri) {
+        String[] projection = { MediaStore.Video.Media.DATA };
+
+        Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
+
+        if (cursor != null) {
+
+            // HERE YOU WILL GET A NULLPOINTER IF CURSOR IS NULL
+            // THIS CAN BE, IF YOU USED OI FILE MANAGER FOR PICKING THE MEDIA
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+
+        } else{
+            return null;
         }
 
     }
 
-    public String getPath(Uri uri) {
-        String[] projection = { MediaStore.Video.Media.DATA };
-        Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
-        if (cursor != null) {
-            // HERE YOU WILL GET A NULLPOINTER IF CURSOR IS NULL
-            // THIS CAN BE, IF YOU USED OI FILE MANAGER FOR PICKING THE MEDIA
-            int column_index = cursor
-                    .getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
-            cursor.moveToFirst();
-            return cursor.getString(column_index);
-        } else
-            return null;
+
+    //
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_CAMERA: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request.
+        }
     }
-
-
-
 }
