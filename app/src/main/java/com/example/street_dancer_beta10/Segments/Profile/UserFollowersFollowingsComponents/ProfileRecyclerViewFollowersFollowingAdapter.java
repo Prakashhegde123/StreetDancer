@@ -33,8 +33,8 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class ProfileRecyclerViewFollowersFollowingAdapter extends RecyclerView.Adapter<ProfileRecyclerViewFollowersFollowingAdapter.MyViewHolder> {
 
-    Context context;
-    Dialog dialog;
+    private Context context;
+    private Dialog dialog;
 
 
     private boolean isFragment;
