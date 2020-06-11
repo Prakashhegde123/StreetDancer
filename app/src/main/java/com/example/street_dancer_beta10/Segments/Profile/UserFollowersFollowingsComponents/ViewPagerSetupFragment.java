@@ -37,7 +37,7 @@ public class ViewPagerSetupFragment extends Fragment {
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
     private List<ProfileFollowersFollowingsModel> profileFollowersFollowingsModels, followersModels;
-    private Toolbar toolbar;
+    Toolbar toolbar;
 
 
 
