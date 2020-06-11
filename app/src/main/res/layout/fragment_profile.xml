@@ -51,6 +51,7 @@
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_below="@+id/toolbar"
             android:layout_marginTop="120dp"
+
             android:layout_marginLeft="20dp"
             android:id="@+id/profile_pic_circular_image_view"
             android:layout_width="100dp"

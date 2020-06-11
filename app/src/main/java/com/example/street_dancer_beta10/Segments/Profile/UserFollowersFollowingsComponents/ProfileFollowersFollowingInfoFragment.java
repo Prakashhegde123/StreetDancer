@@ -14,12 +14,17 @@ import android.view.ViewGroup;
 
 import com.example.street_dancer_beta10.R;
 import com.example.street_dancer_beta10.Segments.Profile.ProfileFollowersFollowingsModel;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class ProfileFollowersFollowingInfoFragment extends Fragment {
-
 
     private List<ProfileFollowersFollowingsModel> profileFollowersFollowingsModels;
     private boolean isFollowersFocused;
@@ -50,40 +55,10 @@ public class ProfileFollowersFollowingInfoFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         recyclerView = view.findViewById(R.id.recycler_view_followers_followings);
-
-        //setObjects();
         setAdapter();
     }
 
-//    private void setObjects(){
-//
-//        profileFollowersFollowingsModels = new ArrayList<>();
-//
-//        profileFollowersFollowingsModels.add(new ProfileFollowersFollowingsModel("Pramod person", "first status", R.drawable.video_profile_image));
-//        profileFollowersFollowingsModels.add(new ProfileFollowersFollowingsModel("Second person", "second status", R.drawable.video_profile_image));
-//        profileFollowersFollowingsModels.add(new ProfileFollowersFollowingsModel("Third person", "third status", R.drawable.video_profile_image));
-//        profileFollowersFollowingsModels.add(new ProfileFollowersFollowingsModel("Fourth person", "fourth status", R.drawable.video_profile_image));
-//        profileFollowersFollowingsModels.add(new ProfileFollowersFollowingsModel("Fifth person", "fifth status", R.drawable.video_profile_image));
-//        profileFollowersFollowingsModels.add(new ProfileFollowersFollowingsModel("First person", "first status", R.drawable.video_profile_image));
-//        profileFollowersFollowingsModels.add(new ProfileFollowersFollowingsModel("Second person", "second status", R.drawable.video_profile_image));
-//        profileFollowersFollowingsModels.add(new ProfileFollowersFollowingsModel("Third person", "third status", R.drawable.video_profile_image));
-//        profileFollowersFollowingsModels.add(new ProfileFollowersFollowingsModel("Fourth person", "fourth status", R.drawable.video_profile_image));
-//        profileFollowersFollowingsModels.add(new ProfileFollowersFollowingsModel("Fifth person", "fifth status", R.drawable.video_profile_image));
-//        profileFollowersFollowingsModels.add(new ProfileFollowersFollowingsModel("First person", "first status", R.drawable.video_profile_image));
-//        profileFollowersFollowingsModels.add(new ProfileFollowersFollowingsModel("Second person", "second status", R.drawable.video_profile_image));
-//        profileFollowersFollowingsModels.add(new ProfileFollowersFollowingsModel("Third person", "third status", R.drawable.video_profile_image));
-//        profileFollowersFollowingsModels.add(new ProfileFollowersFollowingsModel("Fourth person", "fourth status", R.drawable.video_profile_image));
-//        profileFollowersFollowingsModels.add(new ProfileFollowersFollowingsModel("Fifth person", "fifth status", R.drawable.video_profile_image));
-//        profileFollowersFollowingsModels.add(new ProfileFollowersFollowingsModel("First person", "first status", R.drawable.video_profile_image));
-//        profileFollowersFollowingsModels.add(new ProfileFollowersFollowingsModel("Second person", "second status", R.drawable.video_profile_image));
-//        profileFollowersFollowingsModels.add(new ProfileFollowersFollowingsModel("Third person", "third status", R.drawable.video_profile_image));
-//        profileFollowersFollowingsModels.add(new ProfileFollowersFollowingsModel("Fourth person", "fourth status", R.drawable.video_profile_image));
-//        profileFollowersFollowingsModels.add(new ProfileFollowersFollowingsModel("Fifth person", "fifth status", R.drawable.video_profile_image));
-//        profileFollowersFollowingsModels.add(new ProfileFollowersFollowingsModel("First person", "first status", R.drawable.video_profile_image));
-//
-//    }
-
-    private void setAdapter(){
+    private void setAdapter() {
         adapter = new ProfileRecyclerViewFollowersFollowingAdapter(getContext(), profileFollowersFollowingsModels, this.isFollowersFocused);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);

@@ -2,8 +2,13 @@ package com.example.street_dancer_beta10.Segments.Profile;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
@@ -14,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -31,6 +37,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,6 +56,10 @@ import com.example.street_dancer_beta10.Segments.Profile.UserFollowersFollowings
 import com.example.street_dancer_beta10.Segments.Profile.UserUploadComponents.ProfileUserUploadFragment;
 import com.example.street_dancer_beta10.SharedComponents.Models.MediaObject;
 import com.example.street_dancer_beta10.SignInActivity;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -56,6 +67,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -64,8 +79,10 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 
 public class ProfileFragment extends Fragment {
@@ -79,6 +96,7 @@ public class ProfileFragment extends Fragment {
     private Fragment fragment;
     FirebaseAuth firebaseAuth;
     private TextView fullname;
+    ImageView image_profile;
     private TextView username;
     private ImageView profileImage;
 
@@ -87,17 +105,31 @@ public class ProfileFragment extends Fragment {
     private TextView followersFollowingProfile;
 
     FirebaseUser firebaseUser;
+
+    private static final int CAMERA_REQUEST_CODE = 100;
+    private static final int STORAGE_REQUEST_CODE = 200;
+    private static final int IMAGE_PICK_GALLERY_CODE = 300;
+    private static final int IMAGE_PICK_CAMERA_CODE = 400;
+
+    String cameraPermissions[];
+    String storagePermissions[];
+    ProgressDialog pd;
+
     String profileid;
+
+    Uri image_uri;
+
+
 
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
     private static final String USERS = "Users";
     private String email;
 
-//    private FirebaseUser firebaseUser;
-//    String uid;
-//    DatabaseReference databaseReference;
-//    List<String> itemList;
+
+    private Uri mImageUri;
+    private StorageTask uploadTask;
+    StorageReference storageRef;
 
 
 
@@ -174,12 +206,6 @@ public class ProfileFragment extends Fragment {
         SharedPreferences prefs = getContext().getSharedPreferences("PREFS", MODE_PRIVATE);
         profileid = prefs.getString("profileid", "none");
 
-//        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar_profile);
-//        toolbar.inflateMenu(R.menu.my_menu);
-//        if(toolbar != null) {
-//            ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-//        }
-
         ButterKnife.bind(this, view);
         Log.d(TAG, "onViewCreated: inside on-create-view");
         return view;
@@ -202,8 +228,10 @@ public class ProfileFragment extends Fragment {
         username = view.findViewById(R.id.username);
         profileImage = view.findViewById(R.id.profile_pic_circular_image_view);
 
+        pd = new ProgressDialog(getActivity());
 
-
+        cameraPermissions = new String[]{Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE };
+        cameraPermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE };
 
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
@@ -211,6 +239,8 @@ public class ProfileFragment extends Fragment {
         toolbar.inflateMenu(R.menu.my_menu);
 
         loadProfileDefault();
+
+
 
         // Clearing older images from cache directory
         // don't call this line if you want to choose multiple images in the same activity
@@ -226,7 +256,8 @@ public class ProfileFragment extends Fragment {
         followers_linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragment = new ViewPagerSetupFragment();
+                fragment = new ViewPagerSetupFragment("followers");
+
 
                 HomeActivity.fragmentManager
                         .beginTransaction()
@@ -239,7 +270,7 @@ public class ProfileFragment extends Fragment {
         following_linearlayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragment = new ViewPagerSetupFragment();
+                fragment = new ViewPagerSetupFragment("followings");
 
                 HomeActivity.fragmentManager
                         .beginTransaction()
@@ -342,8 +373,12 @@ public class ProfileFragment extends Fragment {
         adapter = new ProfileRecyclerViewAdapter(getContext(), mediaObjects, initGlide());
         recyclerView.setHasFixedSize(true);
 
+
+
         // SETUP THE ADAPTER
         recyclerView.setAdapter(adapter);
+
+
 
         // SET THE LAYOUT TO "GRID-LAYOUT"
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
@@ -371,7 +406,10 @@ public class ProfileFragment extends Fragment {
                 .into(imageView);
         imageView.setColorFilter(ContextCompat.getColor(getContext(), R.color.profile_default_tint));
     }
-    @OnClick({ R.id.profile_pic_circular_image_view})
+
+
+
+        @OnClick({ R.id.profile_pic_circular_image_view})
     void onProfileImageClick() {
         Dexter.withActivity(getActivity())
                 .withPermissions(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -393,6 +431,15 @@ public class ProfileFragment extends Fragment {
                     }
                 }).check();
     }
+
+
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////////
 
     private void showImagePickerOptions() {
         ImagePickerActivity.showImagePickerOptions(getContext(), new ImagePickerActivity.PickerOptionListener() {

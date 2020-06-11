@@ -201,6 +201,7 @@ public class ImagePickerActivity extends AppCompatActivity {
     private void setResultOk(Uri imagePath) {
         Intent intent = new Intent();
         Log.d(TAG, "setResultOk: after");
+        Toast.makeText(this, "path="+imagePath, Toast.LENGTH_SHORT).show();
         intent.putExtra("path", imagePath);
         setResult(Activity.RESULT_OK, intent);
         finish();

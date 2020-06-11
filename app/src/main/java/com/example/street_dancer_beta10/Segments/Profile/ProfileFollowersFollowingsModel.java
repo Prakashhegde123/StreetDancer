@@ -1,17 +1,25 @@
 package com.example.street_dancer_beta10.Segments.Profile;
 
-public class    ProfileFollowersFollowingsModel {
+public class ProfileFollowersFollowingsModel {
 
-    private String id;
-    private String UserName;
-    private String Name;
-    private int UserProfile;
+    String id;
+    String dob;
+    String gender;
+    String mail;
+    String name;
+    String pass;
+    String phone;
+    String repass;
 
-    public ProfileFollowersFollowingsModel(String id,String UserName, String Name, int UserProfile) {
+    public ProfileFollowersFollowingsModel(String dob, String gender, String id, String mail, String name, String pass, String phone, String repass) {
+        this.dob = dob;
+        this.gender = gender;
         this.id=id;
-        this.UserName = UserName;
-        this.Name = Name;
-        this.UserProfile = UserProfile;
+        this.mail = mail;
+        this.name = name;
+        this.pass = pass;
+        this.phone = phone;
+        this.repass = repass;
     }
 
     public ProfileFollowersFollowingsModel() {
@@ -25,27 +33,59 @@ public class    ProfileFollowersFollowingsModel {
         this.id = id;
     }
 
-    public String getUserName() {
-        return UserName;
+    public String getDob() {
+        return dob;
     }
 
-    public void setUserName(String UserName) {
-        this.UserName = UserName;
+    public void setDob(String dob) {
+        this.dob = dob;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
-    public void setName(String Name) {
-        this.Name = Name;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public int getUserProfile() {
-        return UserProfile;
+    public String getPass() {
+        return pass;
     }
 
-    public void setUserProfile(int UserProfile) {
-        this.UserProfile = UserProfile;
+    public void setPass(String pass) {
+        this.pass = pass;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getRepass() {
+        return repass;
+    }
+
+    public void setRepass(String repass) {
+        this.repass = repass;
     }
 }

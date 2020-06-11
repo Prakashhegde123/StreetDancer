@@ -2,8 +2,6 @@ package com.example.street_dancer_beta10.Segments.Profile.UserFollowersFollowing
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
@@ -12,33 +10,25 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.example.street_dancer_beta10.HomeActivity;
-import com.example.street_dancer_beta10.MainActivity;
 import com.example.street_dancer_beta10.R;
 import com.example.street_dancer_beta10.Segments.Profile.ProfileFollowersFollowingsModel;
-import com.example.street_dancer_beta10.Segments.Profile.ProfileFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class ProfileRecyclerViewFollowersFollowingAdapter extends RecyclerView.Adapter<ProfileRecyclerViewFollowersFollowingAdapter.MyViewHolder> {
 
     private Context context;
     private Dialog dialog;
 
-
     private boolean isFragment;
     private FirebaseUser firebaseUser;
+
 
     private List<ProfileFollowersFollowingsModel> profileFollowersFollowingsModels;
     private boolean isFollowersFocused;
@@ -75,10 +65,10 @@ public class ProfileRecyclerViewFollowersFollowingAdapter extends RecyclerView.A
         } else {
             holder.button.setText("remove");
         }
-        holder.username.setText(profileFollowersFollowingsModels.get(position).getUserName());
-        holder.fullname.setText(profileFollowersFollowingsModels.get(position).getName());
+        holder.username.setText(profileFollowersFollowingsModels.get(position).getName());
+        holder.fullname.setText(profileFollowersFollowingsModels.get(position).getMail());
 
-        holder.profile.setImageResource(profileFollowersFollowingsModels.get(position).getUserProfile());
+        //holder.profile.setImageResource(profileFollowersFollowingsModels.get(position).getUserProfile());
 
 //        holder.item_followers.setOnClickListener(new View.OnClickListener() {
 //            @Override
